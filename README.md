@@ -1,5 +1,7 @@
-# Oystercard - *Revisiting the week 2 challenge*
-  
+# Oystercard
+
+*Revisiting the week 2 challenge*
+
 ## User Stories
 ```
 In order to use public transport
@@ -50,3 +52,8 @@ In order to be charged the correct amount
 As a customer
 I need to have the correct fare calculated
 ```
+  
+## Instructions
+
+1. Clone this repo
+2. Run `bundle install`  
