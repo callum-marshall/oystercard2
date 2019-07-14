@@ -37,13 +37,19 @@ describe Oystercard do
 
   describe '#touch_in' do
     it 'sets in journey to true' do
+      card.top_up(10)
       card.touch_in
       expect(card).to be_in_journey
+    end
+
+    it 'throws an exception if a card has insufficient balance' do
+      expect { card.touch_in }.to raise_error("You have insufficient funds")
     end
   end
 
   describe '#touch_out' do
     it 'sets in journey to false' do
+      card.top_up(10)
       card.touch_in
       card.touch_out
       expect(card).not_to be_in_journey
