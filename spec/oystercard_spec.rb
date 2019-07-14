@@ -5,6 +5,7 @@ describe Oystercard do
   let(:card) { Oystercard.new }
   let(:max_bal) { Oystercard::MAX_BAL }
   let(:min_fare) { Oystercard::MIN_FARE }
+  let(:entry_station) { "Bank" }
 
   describe '#balance' do
     it 'starts with a default balance of 0' do
@@ -32,26 +33,32 @@ describe Oystercard do
   describe '#touch_in' do
     it 'changes in_journey to true' do
       card.top_up(10)
-      card.touch_in
+      card.touch_in(entry_station)
       expect(card).to be_in_journey
     end
 
     it 'throws an exception if a card has insufficient balance' do
-      expect { card.touch_in }.to raise_error("You have insufficient funds")
+      expect { card.touch_in(entry_station) }.to raise_error("You have insufficient funds")
+    end
+
+    it 'records the entry station' do
+      card.top_up(10)
+      card.touch_in(entry_station)
+      expect(card.entry_station).to eq entry_station
     end
   end
 
   describe '#touch_out' do
     it 'changes in_journey to false' do
       card.top_up(10)
-      card.touch_in
+      card.touch_in(entry_station)
       card.touch_out
       expect(card).not_to be_in_journey
     end
 
     it 'deducts the minimum fare' do
       card.top_up(10)
-      card.touch_in
+      card.touch_in(entry_station)
       expect { card.touch_out }.to change { card.balance }.by(-5)
     end
   end
