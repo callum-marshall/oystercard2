@@ -5,8 +5,20 @@ describe Oystercard do
   let(:card) { Oystercard.new }
   let(:max_bal) { Oystercard::MAX_BAL }
   let(:min_fare) { Oystercard::MIN_FARE }
-  let(:entry_station) { "Bank" }
-  let(:exit_station) { "Brixton" }
+  let(:entry_station) { double :station }
+  let(:exit_station) { double :station }
+  let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
+
+  it 'has an empty list of journeys by default' do
+    expect(subject.journeys).to be_empty
+  end
+
+  it 'stores a journey' do
+    card.top_up(10)
+    card.touch_in(entry_station)
+    card.touch_out(exit_station)
+    expect(card.journeys).to include journey
+  end
 
   describe '#balance' do
     it 'starts with a default balance of 0' do
