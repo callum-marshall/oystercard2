@@ -57,7 +57,7 @@ describe Oystercard do
     it 'records the entry station' do
       card.top_up(10)
       card.touch_in(entry_station)
-      expect(card.entry_station).to eq entry_station
+      expect(card.journeys[:entry_station]).to eq entry_station
     end
   end
 
@@ -79,7 +79,7 @@ describe Oystercard do
       card.top_up(10)
       card.touch_in(entry_station)
       card.touch_out(exit_station)
-      expect(card.exit_station).to eq exit_station
+      expect(card.journeys[:exit_station]).to eq exit_station
     end
   end
 end
