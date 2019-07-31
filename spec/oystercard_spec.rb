@@ -6,6 +6,7 @@ describe Oystercard do
   let(:max_bal) { Oystercard::MAX_BAL }
   let(:min_fare) { Oystercard::MIN_FARE }
   let(:entry_station) { "Bank" }
+  let(:exit_station) { "Brixton" }
 
   describe '#balance' do
     it 'starts with a default balance of 0' do
@@ -52,14 +53,21 @@ describe Oystercard do
     it 'changes in_journey to false' do
       card.top_up(10)
       card.touch_in(entry_station)
-      card.touch_out
+      card.touch_out(exit_station)
       expect(card).not_to be_in_journey
     end
 
     it 'deducts the minimum fare' do
       card.top_up(10)
       card.touch_in(entry_station)
-      expect { card.touch_out }.to change { card.balance }.by(-5)
+      expect { card.touch_out(exit_station) }.to change { card.balance }.by(-5)
+    end
+
+    it 'records the exit station' do
+      card.top_up(10)
+      card.touch_in(entry_station)
+      card.touch_out(exit_station)
+      expect(card.exit_station).to eq exit_station
     end
   end
 end
