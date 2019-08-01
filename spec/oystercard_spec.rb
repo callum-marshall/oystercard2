@@ -7,7 +7,7 @@ describe Oystercard do
   let(:min_fare) { Oystercard::MIN_FARE }
   let(:entry_station) { double :station }
   let(:exit_station) { double :station }
-  let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
+  let(:journey) { { entry_station: entry_station, exit_station: exit_station } }
 
   it 'has an empty list of journeys by default' do
     expect(subject.journeys).to be_empty
@@ -20,10 +20,8 @@ describe Oystercard do
     expect(card.journeys).to include journey
   end
 
-  describe '#balance' do
-    it 'starts with a default balance of 0' do
-      expect(card.balance).to eq 0
-    end
+  it 'starts with a default balance of 0' do
+    expect(card.balance).to eq 0
   end
 
   describe '#top_up' do
@@ -53,12 +51,6 @@ describe Oystercard do
     it 'throws an exception if a card has insufficient balance' do
       expect { card.touch_in(entry_station) }.to raise_error("You have insufficient funds")
     end
-
-    it 'records the entry station' do
-      card.top_up(10)
-      card.touch_in(entry_station)
-      expect(card.journeys[:entry_station]).to eq entry_station
-    end
   end
 
   describe '#touch_out' do
@@ -73,13 +65,6 @@ describe Oystercard do
       card.top_up(10)
       card.touch_in(entry_station)
       expect { card.touch_out(exit_station) }.to change { card.balance }.by(-5)
-    end
-
-    it 'records the exit station' do
-      card.top_up(10)
-      card.touch_in(entry_station)
-      card.touch_out(exit_station)
-      expect(card.journeys[:exit_station]).to eq exit_station
     end
   end
 end
