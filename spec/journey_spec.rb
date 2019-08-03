@@ -18,8 +18,12 @@ describe Journey do
       expect(journey.entry_station).to eq station
     end
 
-    it "knows if a journey is not complete" do
+    it 'knows if a journey is not complete' do
       expect(journey).not_to be_complete
+    end
+
+    it 'returns a penalty fare while journey is incomplete' do
+      expect(journey.fare).to eq Journey::PENALTY_FARE
     end
   end
 
@@ -32,8 +36,12 @@ describe Journey do
       expect(journey.exit_station).to eq station
     end
 
-    it "knows if a journey is complete" do
+    it 'knows if a journey is complete' do
       expect(journey).to be_complete
+    end
+
+    it 'returns the example fare when a journey is complete' do
+      expect(journey.fare).to eq Journey::EXAMPLE_FARE
     end
   end
 
