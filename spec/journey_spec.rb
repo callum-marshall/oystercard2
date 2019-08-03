@@ -6,23 +6,34 @@ describe Journey do
   let(:journey) { Journey.new(station) }
 
   it 'has a penalty fare by default' do
-    expect(journey.fare).to eq 6
+    expect(journey.fare).to eq Journey::PENALTY_FARE
+  end
+
+  it 'returns itself when finishing a journey' do
+    expect(journey.finish). to eq journey
   end
 
   context 'starting a journey' do
     it 'has an entry station' do
       expect(journey.entry_station).to eq station
     end
+
+    it "knows if a journey is not complete" do
+      expect(journey).not_to be_complete
+    end
   end
 
   context 'finishing a journey' do
-    it 'returns itself when exiting a journey' do
-      expect(journey.finish(station)). to eq journey
+    before do
+      journey.finish(station)
     end
 
     it 'has an exit station' do
-      journey.finish(station)
       expect(journey.exit_station).to eq station
+    end
+
+    it "knows if a journey is complete" do
+      expect(journey).to be_complete
     end
   end
 
