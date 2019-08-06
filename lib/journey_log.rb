@@ -8,8 +8,19 @@ class JourneyLog
   end
 
   def start(station)
-    @journeys << @journey_class.new(entry_station: station)
+    @current_journey = @journey_class.new(entry_station: station)
+    @journeys << @current_journey
+  end
 
+  def finish(station)
+    @current_journey = current_journey
+    @current_journey.finish(exit_station: station)
+  end
+
+  private
+
+  def current_journey
+    @current_journey ||= journey_class.new
   end
 
 end
