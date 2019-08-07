@@ -1,6 +1,5 @@
 class Journey
 
-  EXAMPLE_FARE = 1
   PENALTY_FARE = 6
 
   attr_reader :entry_station, :exit_station
@@ -19,7 +18,18 @@ class Journey
   end
 
   def fare
-    self.complete? ? EXAMPLE_FARE : PENALTY_FARE
+    complete? ? fare_calc : PENALTY_FARE
   end
+
+  private
+
+  def fare_calc
+    if @entry_station.zone > @exit_station.zone
+      @entry_station.zone - @exit_station.zone + 1
+    else
+      @exit_station.zone - @entry_station.zone + 1
+    end
+  end
+
 
 end
