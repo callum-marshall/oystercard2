@@ -1,4 +1,5 @@
 require 'journey'
+require 'journey_log'
 
 class Oystercard
 
@@ -6,41 +7,40 @@ class Oystercard
   MIN_BAL = 1
   MAX_BAL = 90
 
-  attr_reader :balance, :journey_history
+  attr_reader :balance, :journey_log
 
-  def initialize
+  def initialize(journey_log:)
     @balance = DEF_BAL
-    @journey_history = []
+    @journey_log = journey_log
   end
 
   def top_up(amount)
-    raise("You cannot exceed £#{MAX_BAL}") if (@balance + amount) > MAX_BAL
+    fail("You cannot exceed £#{MAX_BAL}") if invalid_top_up?(amount)
     @balance += amount
   end
 
   def touch_in(entry_station = nil)
-    raise("You have insufficient funds") if @balance < MIN_BAL
-    @journey = Journey.new(entry_station)
+    fail("You have insufficient funds") if insufficient_funds?
+    @journey_log.start(entry_station)
   end
 
   def touch_out(exit_station = nil)
-    @journey.finish(exit_station)
+    @journey = @journey_log.finish(exit_station)
     deduct(@journey.fare)
-    @journey_history << @journey
-  end
-
-  def in_journey?
-    if @journey.is_a?(Journey)
-      !@journey.complete?
-    else
-      false
-    end
   end
 
   private
 
   def deduct(amount)
     @balance -= amount
+  end
+
+  def invalid_top_up?(amount)
+    (@balance + amount) > MAX_BAL
+  end
+
+  def insufficient_funds?
+    @balance < MIN_BAL
   end
 
 end

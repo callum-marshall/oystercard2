@@ -12,9 +12,9 @@ class JourneyLog
   end
 
   def finish(station)
-    @current_journey = current_journey
-    @current_journey.finish(exit_station: station)
+    @journey = current_journey
     @current_journey = nil
+    @journey.finish(exit_station: station)
   end
 
   def journeys
