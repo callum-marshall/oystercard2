@@ -1,6 +1,3 @@
-require 'journey'
-require 'journey_log'
-
 class Oystercard
 
   DEF_BAL = 0
