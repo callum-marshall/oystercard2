@@ -26,6 +26,10 @@ describe JourneyLog do
       allow(journey).to receive(:finish).with(exit_station: station_b).and_return(journey)
     end
 
+    it 'sets current journey to nil and returns it' do
+      expect(journey_log.finish(station_b)).to eq nil
+    end
+
     describe 'journey has been started' do
       before do
         journey_log.start(station_a)
@@ -34,10 +38,6 @@ describe JourneyLog do
       it 'finishes a journey' do
         expect(journey).to receive(:finish).with(exit_station: station_b)
         journey_log.finish(station_b)
-      end
-
-      it 'returns the journey object' do
-        expect(journey_log.finish(station_b)).to eq journey
       end
     end
 
