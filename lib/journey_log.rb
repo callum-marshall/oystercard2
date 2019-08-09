@@ -6,7 +6,7 @@ class JourneyLog
   end
 
   def start(station = nil)
-    @current_journey = @journey_class.new(entry_station: station)
+    @current_journey = @journey_class.new(station)
     @journeys << @current_journey
     @current_journey
   end
@@ -14,7 +14,7 @@ class JourneyLog
   def finish(station)
     @journey = current_journey
     @current_journey = nil
-    @journey.finish(exit_station: station)
+    @journey.finish(station)
   end
 
   def journeys

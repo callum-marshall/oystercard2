@@ -10,7 +10,7 @@ describe JourneyLog do
 
   describe '#start' do
     it 'starts a journey' do
-      expect(journey_class).to receive(:new).with(entry_station: station_a)
+      expect(journey_class).to receive(:new).with(station_a)
       journey_log.start(station_a)
     end
 
@@ -23,7 +23,7 @@ describe JourneyLog do
 
   describe '#finish' do
     before do
-      allow(journey).to receive(:finish).with(exit_station: station_b).and_return(journey)
+      allow(journey).to receive(:finish).with(station_b).and_return(journey)
     end
 
     describe 'journey has been started' do
@@ -32,7 +32,7 @@ describe JourneyLog do
       end
 
       it 'finishes a journey' do
-        expect(journey).to receive(:finish).with(exit_station: station_b)
+        expect(journey).to receive(:finish).with(station_b)
         journey_log.finish(station_b)
       end
 

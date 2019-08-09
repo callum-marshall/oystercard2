@@ -5,7 +5,7 @@ describe 'Features' do
 
   let(:card) { Oystercard.new(journey_log: JourneyLog.new(journey_class: Journey)) }
   let(:bank) { Station.new(name: "Bank", zone: 1) }
-  let(:liverpool_street) { Station.new(name: "Liverpool Street", zone: 1) }
+  let(:liverpool_st) { Station.new(name: "Liverpool Street", zone: 1) }
   let(:bethnal_green) { Station.new(name: "Bethnal Green", zone: 2) }
   let(:edgeware) { Station.new(name: "Edgeware", zone: 5) }
   let(:heathrow) { Station.new(name: "Heathrow", zone: 6) }
@@ -42,21 +42,30 @@ describe 'Features' do
 
   end
 
-  # In order to pay for my journey
-  # As a customer
-  # I need my fare deducted from my card
+  context 'paying for a journey' do
+    # In order to pay for my journey
+    # As a customer
+    # I need my fare deducted from my card
 
-  # In order to get through the barriers
-  # As a customer
-  # I need to touch in and out
+    it 'deducts the fare from a card' do
+      card.top_up(10)
+      card.touch_in(bank)
+      expect { card.touch_out(liverpool_st) }.to change{ card.balance }.by -1
+    end
 
-  # In order to pay for my journey
-  # As a customer
-  # I need to have the minimum amount for a single journey
+    # In order to get through the barriers
+    # As a customer
+    # I need to touch in and out
 
-  # In order to pay for my journey
-  # As a customer
-  # I need to pay for my journey when it's complete
+    # In order to pay for my journey
+    # As a customer
+    # I need to have the minimum amount for a single journey
+
+    # In order to pay for my journey
+    # As a customer
+    # I need to pay for my journey when it's complete
+
+  end
 
   # In order to pay for my journey
   # As a customer
