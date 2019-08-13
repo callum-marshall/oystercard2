@@ -61,9 +61,21 @@ describe 'Features' do
     # As a customer
     # I need to have the minimum amount for a single journey
 
+    it 'requires the user to have the minimum amount for a single journey' do
+      expect(card.balance).to be < Oystercard::MIN_BAL
+      expect { card.touch_in(bank) }.to raise_error("You have insufficient funds")
+    end
+
     # In order to pay for my journey
     # As a customer
     # I need to pay for my journey when it's complete
+
+    it 'deducts the cost of a journey when it is complete' do
+      card.top_up(1)
+      card.touch_in(bank)
+      card.touch_out(heathrow)
+      expect(card.get_balance).to eq -5
+    end
 
   end
 
