@@ -17,8 +17,8 @@ describe 'Features' do
 
     it 'has a balance by default' do
       default_balance = Oystercard::DEF_BAL
-      expect(card.balance).to be default_balance
-      expect(card.balance).to be_a Integer
+      expect(card.get_balance).to be default_balance
+      expect(card.get_balance).to be_a Integer
     end
 
     # In order to keep using public transport
@@ -27,7 +27,7 @@ describe 'Features' do
 
     it 'which can be added to' do
       card.top_up(10)
-      expect(card.balance).to be 10
+      expect(card.get_balance).to be 10
     end
 
     # In order to protect my money
@@ -50,7 +50,9 @@ describe 'Features' do
     it 'deducts the fare from a card' do
       card.top_up(10)
       card.touch_in(bank)
-      expect { card.touch_out(liverpool_st) }.to change{ card.balance }.by -1
+      expect(card.get_balance).to eq 10
+      card.touch_out(liverpool_st)
+      expect(card.get_balance).to eq 9
     end
 
     # In order to get through the barriers
@@ -62,7 +64,7 @@ describe 'Features' do
     # I need to have the minimum amount for a single journey
 
     it 'requires the user to have the minimum amount for a single journey' do
-      expect(card.balance).to be < Oystercard::MIN_BAL
+      expect(card.get_balance).to be < Oystercard::MIN_BAL
       expect { card.touch_in(bank) }.to raise_error("You have insufficient funds")
     end
 

@@ -4,7 +4,7 @@ class Oystercard
   MIN_BAL = 1
   MAX_BAL = 90
 
-  attr_reader :balance, :journey_log
+  attr_reader :journey_log
 
   def initialize(journey_log:)
     @balance = DEF_BAL
