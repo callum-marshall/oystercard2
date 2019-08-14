@@ -129,7 +129,7 @@ describe 'Features' do
 
   context 'being charged the correct amount' do
 
-   let(:penalty_fare) { Journey::PENALTY_FARE }
+    let(:penalty_fare) { Journey::PENALTY_FARE }
 
     # In order to be charged correctly
     # As a customer
@@ -147,13 +147,28 @@ describe 'Features' do
       balance = card.show_balance
       card.touch_in(bank)
       card.touch_in(bethnal_green)
-      p card.journey_log.journeys
       expect(card.show_balance).to eq(balance - penalty_fare)
     end
 
     # In order to be charged the correct amount
     # As a customer
     # I need to have the correct fare calculated
+
+    it 'charges the user the correct fares for complete journeys' do
+      card.top_up(10)
+      card.touch_in(bank)
+      card.touch_out(liverpool_st)
+      expect(card.show_balance).to eq(9)
+      card.touch_in(liverpool_st)
+      card.touch_out(edgeware)
+      expect(card.show_balance).to eq(4)
+      card.touch_in(edgeware)
+      card.touch_out(heathrow)
+      expect(card.show_balance).to eq(2)
+      card.touch_in(heathrow)
+      card.touch_out(bank)
+      expect(card.show_balance).to eq(-4)
+    end
 
   end
 
