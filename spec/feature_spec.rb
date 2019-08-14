@@ -11,6 +11,7 @@ describe 'Features' do
   let(:heathrow) { Station.new(name: "Heathrow", zone: 6) }
 
   context 'having funds on a card' do
+
     # In order to use public transport
     # As a customer
     # I want money on my card
@@ -43,6 +44,7 @@ describe 'Features' do
   end
 
   context 'paying for a journey' do
+
     # In order to pay for my journey
     # As a customer
     # I need my fare deducted from my card
@@ -125,12 +127,34 @@ describe 'Features' do
 
   end
 
-  # In order to be charged correctly
-  # As a customer
-  # I need a penalty charge deducted if I fail to touch in or out
+  context 'being charged the correct amount' do
 
-  # In order to be charged the correct amount
-  # As a customer
-  # I need to have the correct fare calculated
+   let(:penalty_fare) { Journey::PENALTY_FARE }
+
+    # In order to be charged correctly
+    # As a customer
+    # I need a penalty charge deducted if I fail to touch in or out
+
+    it 'charges the user a penalty if they fail to touch in' do
+      card.top_up(10)
+      balance = card.show_balance
+      card.touch_out(bank)
+      expect(card.show_balance).to eq(balance - penalty_fare)
+    end
+
+    it 'charges the user a penalty if they fail to touch out' do
+      card.top_up(10)
+      balance = card.show_balance
+      card.touch_in(bank)
+      card.touch_in(bethnal_green)
+      p card.journey_log.journeys
+      expect(card.show_balance).to eq(balance - penalty_fare)
+    end
+
+    # In order to be charged the correct amount
+    # As a customer
+    # I need to have the correct fare calculated
+
+  end
 
 end

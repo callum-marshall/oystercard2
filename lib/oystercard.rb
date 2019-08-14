@@ -17,6 +17,7 @@ class Oystercard
   end
 
   def touch_in(entry_station = nil)
+    deduct(last_journey.fare) if in_journey?
     fail("You have insufficient funds") if insufficient_funds?
     @journey_log.start(entry_station)
   end
@@ -31,6 +32,16 @@ class Oystercard
   end
 
   private
+
+  def last_journey
+    @journey_log.journeys[-1]
+  end
+
+  def in_journey?
+    return false if last_journey.nil?
+    return false if last_journey.complete?
+    return true
+  end
 
   def deduct(amount)
     @balance -= amount
