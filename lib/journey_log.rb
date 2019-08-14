@@ -21,6 +21,14 @@ class JourneyLog
     @journeys.dup
   end
 
+  def print_journeys
+    string = ""
+    @journeys.each do |journey|
+      string << "#{journey.entry_station.name}->#{journey.exit_station.name}\n"
+    end
+    return string
+  end
+
   private
 
   def current_journey

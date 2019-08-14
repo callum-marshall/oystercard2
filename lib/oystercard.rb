@@ -26,7 +26,7 @@ class Oystercard
     deduct(@journey.fare)
   end
 
-  def get_balance
+  def show_balance
     @balance.dup
   end
 

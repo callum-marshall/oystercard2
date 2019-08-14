@@ -15,7 +15,7 @@ describe Oystercard do
   end
 
   it 'starts with a default balance' do
-    expect(card.get_balance).to eq def_bal
+    expect(card.show_balance).to eq def_bal
   end
 
   describe '#top_up' do
@@ -41,7 +41,7 @@ describe Oystercard do
       card.top_up(value)
       card.touch_in(entry_station)
       card.touch_out(exit_station)
-      expect(card.get_balance).to be (value-journey.fare)
+      expect(card.show_balance).to be(value - journey.fare)
     end
   end
 end

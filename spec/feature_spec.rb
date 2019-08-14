@@ -17,8 +17,8 @@ describe 'Features' do
 
     it 'has a balance by default' do
       default_balance = Oystercard::DEF_BAL
-      expect(card.get_balance).to be default_balance
-      expect(card.get_balance).to be_a Integer
+      expect(card.show_balance).to be default_balance
+      expect(card.show_balance).to be_a Integer
     end
 
     # In order to keep using public transport
@@ -27,7 +27,7 @@ describe 'Features' do
 
     it 'which can be added to' do
       card.top_up(10)
-      expect(card.get_balance).to be 10
+      expect(card.show_balance).to be 10
     end
 
     # In order to protect my money
@@ -50,9 +50,9 @@ describe 'Features' do
     it 'deducts the fare from a card' do
       card.top_up(10)
       card.touch_in(bank)
-      expect(card.get_balance).to eq 10
+      expect(card.show_balance).to eq 10
       card.touch_out(liverpool_st)
-      expect(card.get_balance).to eq 9
+      expect(card.show_balance).to eq 9
     end
 
     # In order to get through the barriers
@@ -64,7 +64,7 @@ describe 'Features' do
     # I need to have the minimum amount for a single journey
 
     it 'requires the user to have the minimum amount for a single journey' do
-      expect(card.get_balance).to be < Oystercard::MIN_BAL
+      expect(card.show_balance).to be < Oystercard::MIN_BAL
       expect { card.touch_in(bank) }.to raise_error("You have insufficient funds")
     end
 
@@ -76,22 +76,45 @@ describe 'Features' do
       card.top_up(1)
       card.touch_in(bank)
       card.touch_out(heathrow)
-      expect(card.get_balance).to eq -5
+      expect(card.show_balance).to eq(-5)
     end
 
   end
 
-  # In order to pay for my journey
-  # As a customer
-  # I need to know where I've travelled from
+  context 'viewing journey details' do
 
-  # In order to know where I have been
-  # As a customer
-  # I want to see to all my previous trips
+    # In order to pay for my journey
+    # As a customer
+    # I need to know where I've travelled from
 
-  # In order to know how far I have travelled
-  # As a customer
-  # I want to know what zone a station is in
+    it 'stores the station the user touches in at' do
+      card.top_up(10)
+      card.touch_in(bank)
+      expect(card.journey_log.journeys[0].entry_station.name).to eq "Bank"
+    end
+
+    # In order to know where I have been
+    # As a customer
+    # I want to see to all my previous trips
+
+    it 'shows the user all their previous trips' do
+      card.top_up(20)
+      card.touch_in(bank)
+      card.touch_out(bethnal_green)
+      card.touch_in(bethnal_green)
+      card.touch_out(liverpool_st)
+      card.touch_in(liverpool_st)
+      card.touch_out(bank)
+      expect(card.journey_log.print_journeys).to include "Bank->Bethnal Green"
+      expect(card.journey_log.print_journeys).to include "Bethnal Green->Liverpool Street"
+      expect(card.journey_log.print_journeys).to include "Liverpool Street->Bank"
+    end
+
+    # In order to know how far I have travelled
+    # As a customer
+    # I want to know what zone a station is in
+
+  end
 
   # In order to be charged correctly
   # As a customer
