@@ -24,7 +24,7 @@ class JourneyLog
   def print_journeys
     string = ""
     @journeys.each do |journey|
-      string << "#{journey.entry_station.name}->#{journey.exit_station.name}\n"
+      string << journey_formatter(journey)
     end
     return string
   end
@@ -33,6 +33,12 @@ class JourneyLog
 
   def current_journey
     @current_journey ||= start
+  end
+
+  def journey_formatter(journey)
+    entry = "#{journey.entry_station.name} (Zone #{journey.entry_station.zone})"
+    exit = "#{journey.exit_station.name} (Zone #{journey.exit_station.zone})\n"
+    "From: #{entry} To: #{exit}"
   end
 
 end
